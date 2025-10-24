@@ -1,104 +1,87 @@
-# Tamagui + Solito + Next + Expo Monorepo
+# SkillBridge Frontend
 
-```sh
-npm create tamagui
+This is the frontend for my SkillBridge project. It's built using a monorepo setup with Expo (for mobile) and Next.js (for web).
+
+## Tech in the project
+
+- **Tamagui** - for styling components that work everywhere
+- **Solito** - makes navigation work the same on web and mobile
+- **Next.js** - handles the web side
+- **Expo** - handles the mobile app
+- **Expo Router** - for routing on mobile
+
+This is based on a starter template by [@FernandoTheRojo](https://twitter.com/fernandotherojo). His [Next.js Conf talk](https://www.youtube.com/watch?v=0lnbdRweJtA) explains the concept really well if you're curious.
+
+## How the Project is Organized
+
+Here's how I've structured everything:
+
+```
+apps/
+  expo/    - the mobile app
+  next/    - the web app
+
+packages/
+  app/     - shared code between mobile and web
+    features/  - organized by feature (not screens)
+    provider/  - context providers and stuff
+  ui/      - custom UI components using Tamagui
 ```
 
-## 🔦 About
+The cool thing is that most of the actual app logic lives in `packages/app` so I can share it between web and mobile.
 
-This monorepo is a starter for an Expo + Next.js + Tamagui + Solito app.
+## Getting Started
 
-Many thanks to [@FernandoTheRojo](https://twitter.com/fernandotherojo) for the Solito starter monorepo which this was forked from. Check out his [talk about using expo + next together at Next.js Conf 2021](https://www.youtube.com/watch?v=0lnbdRweJtA).
+First time setup:
 
-## 📦 Included packages
+```sh
+yarn
+```
 
-- [Tamagui](https://tamagui.dev) 🪄
-- [solito](https://solito.dev) for cross-platform navigation
-- Expo SDK
-- Next.js
-- Expo Router
+Running the web version locally:
 
-## 🗂 Folder layout
+```sh
+yarn web
+```
 
-The main apps are:
+Running the mobile version (make sure you have Expo Go installed):
 
-- `expo` (native)
-- `next` (web)
+```sh
+yarn native
+```
 
-- `packages` shared packages across apps
-  - `ui` includes your custom UI kit that will be optimized by Tamagui
-  - `app` you'll be importing most files from `app/`
-    - `features` (don't use a `screens` folder. organize by feature.)
-    - `provider` (all the providers that wrap the app, and some no-ops for Web.)
+There's also `yarn web:extract` if you want to test with the optimizer on, but honestly it's slower so I usually don't bother during development. For production builds use `yarn web:prod`.
 
-You can add other folders inside of `packages/` if you know what you're doing and have a good reason to.
-
-> [!TIP]
-> Switching from `app` to `pages` router:
->
-> - remove `app` folder from `apps/next`
-> - move `index.tsx` from `pages-example` to `pages` folder
-> - rename `pages-example-user` to `user` and be sure to update `linkTarget` in `screen.tsx` to `user` as well
-> - delete `SwitchRouterButton.tsx` component and remove it from `screen.tsx` and `packages/ui/src/index.tsx`
-> - search for `pagesMode` keyword and remove it
-
-## 🏁 Start the app
-
-- Install dependencies: `yarn`
-
-- Next.js local dev: `yarn web`
-
-To run with optimizer on in dev mode (just for testing, it's faster to leave it off): `yarn web:extract`. To build for production `yarn web:prod`.
-
-To see debug output to verify the compiler, add `// debug` as a comment to the top of any file.
-
-- Expo local dev: `yarn native`
-
-## UI Kit
-
-Note we're following the [design systems guide](https://tamagui.dev/docs/guides/design-systems) and creating our own package for components.
-
-See `packages/ui` named `@my/ui` for how this works.
-
-## 🆕 Add new dependencies
-
-### Pure JS dependencies
-
-If you're installing a JavaScript-only dependency that will be used across platforms, install it in `packages/app`:
+**For regular JavaScript packages** (like date-fns or lodash):
 
 ```sh
 cd packages/app
-yarn add date-fns
+yarn add <package-name>
 cd ../..
 yarn
 ```
 
-### Native dependencies
-
-If you're installing a library with any native code, you must install it in `expo`:
+**For packages with native code** (like react-native-reanimated):
 
 ```sh
 cd apps/expo
-yarn add react-native-reanimated
-cd ..
+yarn add <package-name>
+cd ../..
 yarn
 ```
 
-## Update new dependencies
+The key thing is native packages MUST go in the expo folder, otherwise the mobile app won't build.
 
-### Pure JS dependencies
+## Updating Dependencies
+
+Just run:
 
 ```sh
 yarn upgrade-interactive
 ```
 
-You can also install the native library inside of `packages/app` if you want to get autoimport for that package inside of the `app` folder. However, you need to be careful and install the _exact_ same version in both packages. If the versions mismatch at all, you'll potentially get terrible bugs. This is a classic monorepo issue. I use `lerna-update-wizard` to help with this (you don't need to use Lerna to use that lib).
+## UI Components
 
-You may potentially want to have the native module transpiled for the next app. If you get error messages with `Cannot use import statement outside a module`, you may need to use `transpilePackages` in your `next.config.js` and add the module to the array there.
+We are using Tamagui's design system approach, so all my custom components are in `packages/ui`. It's set up as `@my/ui` internally.
 
-### Deploying to Vercel
-
-- Root: `apps/next`
-- Install command to be `yarn set version stable && yarn install`
-- Build command: leave default setting
-- Output dir: leave default setting
+Check out the [Tamagui design systems guide](https://tamagui.dev/docs/guides/design-systems) if you want to understand this better.
