@@ -13,6 +13,8 @@
   "dependencies": {
     "@tamagui/config": "^1.135.4",
     "@tamagui/next-theme": "^1.135.4",
+    "@tanstack/react-query": "^5.90.5",
+    "@tanstack/react-query-devtools": "^5.90.2",
     "app": "0.0.0",
     "next": "14.2.14",
     "raf": "^3.4.1",

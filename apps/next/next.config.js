@@ -45,6 +45,18 @@ module.exports = () => {
     experimental: {
       scrollRestoration: true,
     },
+    async rewrites() {
+      return [
+        {
+          source: '/api/:path*',
+          destination: 'https://api-sb-wsb.franeklab.com/api/:path*',
+        },
+        {
+          source: '/auth/:path*',
+          destination: 'https://api-sb-wsb.franeklab.com/auth/:path*',
+        },
+      ]
+    },
   }
 
   for (const plugin of plugins) {

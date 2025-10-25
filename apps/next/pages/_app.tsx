@@ -7,6 +7,7 @@ import type React from 'react'
 import Head from 'next/head'
 import type { SolitoAppProps } from 'solito'
 import { NextTamaguiProvider } from 'app/provider/NextTamaguiProvider'
+import { AuthProvider, QueryProvider } from 'app'
 import { config } from '@my/ui'
 
 if (process.env.NODE_ENV === 'production') {
@@ -46,7 +47,11 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
         />
       </Head>
       <NextTamaguiProvider>
-        <Component {...pageProps} />
+        <QueryProvider>
+          <AuthProvider>
+            <Component {...pageProps} />
+          </AuthProvider>
+        </QueryProvider>
       </NextTamaguiProvider>
     </>
   )
