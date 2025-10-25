@@ -14,12 +14,20 @@ import { ChevronDown, ChevronUp } from '@tamagui/lucide-icons'
 import { useState } from 'react'
 import { Platform } from 'react-native'
 import { useLink } from 'solito/navigation'
+import { useAuth } from '../../contexts/auth-context'
+import { AuthScreen } from '../auth/auth-screen'
 
 export function HomeScreen() {
+  const { isAuthenticated, user, logout } = useAuth()
   const linkTarget = '/user'
   const linkProps = useLink({
     href: `${linkTarget}/nate`,
   })
+
+  // Show auth screen if not authenticated
+  if (!isAuthenticated) {
+    return <AuthScreen />
+  }
 
   return (
     <YStack flex={1} justify="center" items="center" gap="$8" p="$4" bg="$background">
@@ -41,16 +49,19 @@ export function HomeScreen() {
 
       <YStack gap="$4">
         <H1 text="center" color="$color12">
-          Welcome to Tamagui.
+          Welcome to SkillBridge, {user?.name}!
         </H1>
         <Paragraph color="$color10" text="center">
-          Here's a basic starter to show navigating from one screen to another.
+          You are logged in as {user?.email} ({user?.role})
         </Paragraph>
         <Separator />
         <Paragraph text="center">
           This screen uses the same code on Next.js and React Native.
         </Paragraph>
         <Separator />
+        <Button onPress={logout} variant="outlined">
+          Logout
+        </Button>
       </YStack>
 
       <Button {...linkProps}>Link to user</Button>

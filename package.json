@@ -23,7 +23,9 @@
     "check-tamagui": "tamagui check",
     "test": "vitest run",
     "test:watch": "vitest",
-    "prepare": "husky"
+    "prepare": "husky",
+    "generate-api": "./scripts/generate-api.sh",
+    "generate-api:watch": "nodemon --watch openapi-spec.json --exec 'yarn generate-api'"
   },
   "resolutions": {
     "react": "19.0.0",
@@ -38,6 +40,7 @@
     "check-dependency-version-consistency": "^4.1.0",
     "eslint": "^9.3.0",
     "husky": "^9.1.6",
+    "openapi-fetch": "^0.15.0",
     "prettier": "^3.3.3",
     "turbo": "^1.13.4",
     "typescript": "~5.8.3",
@@ -50,6 +53,9 @@
     "npm": "10.8"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.3"
+    "@biomejs/biome": "^1.9.3",
+    "@openapitools/openapi-generator-cli": "^2.25.0",
+    "nodemon": "^3.1.10",
+    "openapi-typescript": "^7.10.1"
   }
 }

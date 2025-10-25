@@ -4,6 +4,7 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { useFonts } from 'expo-font'
 import { SplashScreen, Stack } from 'expo-router'
 import { Provider } from 'app/provider'
+import { QueryProvider } from 'app/providers/query-provider.native'
 import { NativeToast } from '@my/ui/src/NativeToast'
 
 export const unstable_settings = {
@@ -38,11 +39,13 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme()
 
   return (
-    <Provider>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack />
-        <NativeToast />
-      </ThemeProvider>
-    </Provider>
+    <QueryProvider>
+      <Provider>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <Stack />
+          <NativeToast />
+        </ThemeProvider>
+      </Provider>
+    </QueryProvider>
   )
 }

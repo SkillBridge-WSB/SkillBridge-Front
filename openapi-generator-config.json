@@ -1,0 +1,19 @@
+{
+  "generatorName": "typescript-fetch",
+  "inputSpec": "./openapi-spec.json",
+  "outputDir": "./packages/app/api/generated",
+  "additionalProperties": {
+    "typescriptThreePlus": true,
+    "supportsES6": true,
+    "withInterfaces": true,
+    "modelPropertyNaming": "camelCase",
+    "enumPropertyNaming": "UPPERCASE"
+  }
+}
+
+
+
+
+
+
+

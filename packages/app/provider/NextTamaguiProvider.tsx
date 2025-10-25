@@ -10,6 +10,7 @@ import { useServerInsertedHTML } from 'next/navigation'
 import { NextThemeProvider, useRootTheme } from '@tamagui/next-theme'
 import { config } from '@my/ui'
 import { Provider } from 'app/provider'
+import { QueryProvider } from 'app/providers/query-provider'
 import { StyleSheet } from 'react-native'
 
 export const NextTamaguiProvider = ({ children }: { children: ReactNode }) => {
@@ -49,16 +50,18 @@ export const NextTamaguiProvider = ({ children }: { children: ReactNode }) => {
   })
 
   return (
-    <NextThemeProvider
-      skipNextHead
-      defaultTheme="light"
-      onChangeTheme={(next) => {
-        setTheme(next as any)
-      }}
-    >
-      <Provider disableRootThemeClass defaultTheme={theme || 'light'}>
-        {children}
-      </Provider>
-    </NextThemeProvider>
+    <QueryProvider>
+      <NextThemeProvider
+        skipNextHead
+        defaultTheme="light"
+        onChangeTheme={(next) => {
+          setTheme(next as any)
+        }}
+      >
+        <Provider disableRootThemeClass defaultTheme={theme || 'light'}>
+          {children}
+        </Provider>
+      </NextThemeProvider>
+    </QueryProvider>
   )
 }
