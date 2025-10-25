@@ -40,6 +40,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
 
   const handleSubmit = () => {
     if (!loginMutation.isPending && !hasProcessedSuccess.current) {
+      formData.email = formData.email?.toLowerCase()
       loginMutation.mutate(formData)
     }
   }

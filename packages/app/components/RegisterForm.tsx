@@ -42,6 +42,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
 
   const handleSubmit = () => {
     if (!registerMutation.isPending && !registerMutation.isSuccess) {
+      formData.email = formData.email?.toLowerCase()
       registerMutation.mutate(formData)
     }
   }
