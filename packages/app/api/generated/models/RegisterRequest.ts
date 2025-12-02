@@ -30,13 +30,13 @@ export interface RegisterRequest {
      * @type {string}
      * @memberof RegisterRequest
      */
-    password?: string;
+    password: string;
     /**
      * 
      * @type {string}
      * @memberof RegisterRequest
      */
-    name?: string;
+    name: string;
     /**
      * 
      * @type {string}
@@ -61,6 +61,8 @@ export interface RegisterRequest {
  * Check if a given object implements the RegisterRequest interface.
  */
 export function instanceOfRegisterRequest(value: object): value is RegisterRequest {
+    if (!('password' in value) || value['password'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
     return true;
 }
 
@@ -75,8 +77,8 @@ export function RegisterRequestFromJSONTyped(json: any, ignoreDiscriminator: boo
     return {
         
         'email': json['email'] == null ? undefined : json['email'],
-        'password': json['password'] == null ? undefined : json['password'],
-        'name': json['name'] == null ? undefined : json['name'],
+        'password': json['password'],
+        'name': json['name'],
         'bio': json['bio'] == null ? undefined : json['bio'],
         'imageUrl': json['image_url'] == null ? undefined : json['image_url'],
         'role': json['role'] == null ? undefined : json['role'],

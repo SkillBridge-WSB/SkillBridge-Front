@@ -3161,6 +3161,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-async-storage/async-storage@npm:^2.2.0":
+  version: 2.2.0
+  resolution: "@react-native-async-storage/async-storage@npm:2.2.0"
+  dependencies:
+    merge-options: "npm:^3.0.4"
+  peerDependencies:
+    react-native: ^0.0.0-0 || >=0.65 <1.0
+  checksum: 10/625e42134f0c487acfd4ba9b3ba182e6f6f29581485004cc658850ef024372cdb7381b7399393f4416fda39df2d822e3008427d7671d635a7363f9a65430a2dd
+  languageName: node
+  linkType: hard
+
 "@react-native/assets-registry@npm:0.79.2":
   version: 0.79.2
   resolution: "@react-native/assets-registry@npm:0.79.2"
@@ -3707,6 +3718,13 @@ __metadata:
   dependencies:
     "@sinonjs/commons": "npm:^3.0.0"
   checksum: 10/78155c7bd866a85df85e22028e046b8d46cf3e840f72260954f5e3ed5bd97d66c595524305a6841ffb3f681a08f6e5cef572a2cce5442a8a232dc29fb409b83e
+  languageName: node
+  linkType: hard
+
+"@stomp/stompjs@npm:^7.2.1":
+  version: 7.2.1
+  resolution: "@stomp/stompjs@npm:7.2.1"
+  checksum: 10/7728acf4b65aec51d5904c4623d78c6a80dc9d114bd16cf703418a7521713017888df7e67315a28deae6f8305abef5d755ce8d54687f03e06fa2c6bae6b53a9d
   languageName: node
   linkType: hard
 
@@ -5859,6 +5877,13 @@ __metadata:
   dependencies:
     csstype: "npm:^3.0.2"
   checksum: 10/caf4572aae4f7efd049138bc4917f465a8e00abb362fcf6e6f82c9ed88fc42555109f0a3be7a738ed5efbdd51b0f0a4256f7d5141545f29fb7dc31b8e872aa4b
+  languageName: node
+  linkType: hard
+
+"@types/sockjs-client@npm:^1":
+  version: 1.5.4
+  resolution: "@types/sockjs-client@npm:1.5.4"
+  checksum: 10/197ff99955d6e08442b27871811294c1348c51904a4f6d2c1d337cd4bfd0ffed0d00bf8ac000d8c275c9934c65e6cc4ce25c58974939921deb817a4b30fbb859
   languageName: node
   linkType: hard
 
@@ -9733,6 +9758,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eventsource@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "eventsource@npm:2.0.2"
+  checksum: 10/e1c4c3664cebf9efdd55c90818ef847099f298bf521768d479cf22d8a681e666b3042de85327711ba6a8414ac6a04c70d2aeb4f405bba8239a8c36e06a019374
+  languageName: node
+  linkType: hard
+
 "exec-async@npm:^2.2.0":
   version: 2.2.0
   resolution: "exec-async@npm:2.2.0"
@@ -9773,6 +9805,7 @@ __metadata:
     "@expo/config-plugins": "npm:~10.0.0"
     "@expo/metro-config": "npm:~0.20.0"
     "@my/ui": "npm:0.0.1"
+    "@react-native-async-storage/async-storage": "npm:^2.2.0"
     "@react-navigation/bottom-tabs": "npm:^7.3.12"
     "@react-navigation/native": "npm:^7.1.8"
     "@tamagui/babel-plugin": "npm:^1.135.4"
@@ -10239,6 +10272,15 @@ __metadata:
   dependencies:
     reusify: "npm:^1.0.4"
   checksum: 10/75679dc226316341c4f2a6b618571f51eac96779906faecd8921b984e844d6ae42fabb2df69b1071327d398d5716693ea9c9c8941f64ac9e89ec2032ce59d730
+  languageName: node
+  linkType: hard
+
+"faye-websocket@npm:^0.11.4":
+  version: 0.11.4
+  resolution: "faye-websocket@npm:0.11.4"
+  dependencies:
+    websocket-driver: "npm:>=0.5.1"
+  checksum: 10/22433c14c60925e424332d2794463a8da1c04848539b5f8db5fced62a7a7c71a25335a4a8b37334e3a32318835e2b87b1733d008561964121c4a0bd55f0878c3
   languageName: node
   linkType: hard
 
@@ -11219,6 +11261,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"http-parser-js@npm:>=0.5.1":
+  version: 0.5.10
+  resolution: "http-parser-js@npm:0.5.10"
+  checksum: 10/33c53b458cfdf7e43f1517f9bcb6bed1c614b1c7c5d65581a84304110eb9eb02a48f998c7504b8bee432ef4a8ec9318e7009406b506b28b5610fed516242b20a
+  languageName: node
+  linkType: hard
+
 "http-proxy-agent@npm:^7.0.0, http-proxy-agent@npm:^7.0.1":
   version: 7.0.2
   resolution: "http-proxy-agent@npm:7.0.2"
@@ -11665,6 +11714,13 @@ __metadata:
   version: 7.0.0
   resolution: "is-number@npm:7.0.0"
   checksum: 10/6a6c3383f68afa1e05b286af866017c78f1226d43ac8cb064e115ff9ed85eb33f5c4f7216c96a71e4dfea289ef52c5da3aef5bbfade8ffe47a0465d70c0c8e86
+  languageName: node
+  linkType: hard
+
+"is-plain-obj@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "is-plain-obj@npm:2.1.0"
+  checksum: 10/cec9100678b0a9fe0248a81743041ed990c2d4c99f893d935545cfbc42876cbe86d207f3b895700c690ad2fa520e568c44afc1605044b535a7820c1d40e38daa
   languageName: node
   linkType: hard
 
@@ -12697,6 +12753,15 @@ __metadata:
   version: 1.0.3
   resolution: "merge-descriptors@npm:1.0.3"
   checksum: 10/52117adbe0313d5defa771c9993fe081e2d2df9b840597e966aadafde04ae8d0e3da46bac7ca4efc37d4d2b839436582659cd49c6a43eacb3fe3050896a105d1
+  languageName: node
+  linkType: hard
+
+"merge-options@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "merge-options@npm:3.0.4"
+  dependencies:
+    is-plain-obj: "npm:^2.1.0"
+  checksum: 10/d86ddb3dd6e85d558dbf25dc944f3527b6bacb944db3fdda6e84a3f59c4e4b85231095f58b835758b9a57708342dee0f8de0dffa352974a48221487fe9f4584f
   languageName: node
   linkType: hard
 
@@ -14833,6 +14898,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"querystringify@npm:^2.1.1":
+  version: 2.2.0
+  resolution: "querystringify@npm:2.2.0"
+  checksum: 10/46ab16f252fd892fc29d6af60966d338cdfeea68a231e9457631ffd22d67cec1e00141e0a5236a2eb16c0d7d74175d9ec1d6f963660c6f2b1c2fc85b194c5680
+  languageName: node
+  linkType: hard
+
 "queue-microtask@npm:^1.2.2":
   version: 1.2.3
   resolution: "queue-microtask@npm:1.2.3"
@@ -15315,6 +15387,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"requires-port@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "requires-port@npm:1.0.0"
+  checksum: 10/878880ee78ccdce372784f62f52a272048e2d0827c29ae31e7f99da18b62a2b9463ea03a75f277352f4697c100183debb0532371ad515a2d49d4bfe596dd4c20
+  languageName: node
+  linkType: hard
+
 "reselect@npm:^4.1.7":
   version: 4.1.8
   resolution: "reselect@npm:4.1.8"
@@ -15600,7 +15679,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"safe-buffer@npm:5.2.1, safe-buffer@npm:~5.2.0":
+"safe-buffer@npm:5.2.1, safe-buffer@npm:>=5.1.0, safe-buffer@npm:~5.2.0":
   version: 5.2.1
   resolution: "safe-buffer@npm:5.2.1"
   checksum: 10/32872cd0ff68a3ddade7a7617b8f4c2ae8764d8b7d884c651b74457967a9e0e886267d3ecc781220629c44a865167b61c375d2da6c720c840ecd73f45d5d9451
@@ -16118,7 +16197,9 @@ __metadata:
     "@babel/runtime": "npm:^7.24.6"
     "@biomejs/biome": "npm:^1.9.3"
     "@openapitools/openapi-generator-cli": "npm:^2.25.0"
+    "@stomp/stompjs": "npm:^7.2.1"
     "@tamagui/cli": "npm:^1.135.4"
+    "@types/sockjs-client": "npm:^1"
     check-dependency-version-consistency: "npm:^4.1.0"
     eslint: "npm:^9.3.0"
     husky: "npm:^9.1.6"
@@ -16126,6 +16207,7 @@ __metadata:
     openapi-fetch: "npm:^0.15.0"
     openapi-typescript: "npm:^7.10.1"
     prettier: "npm:^3.3.3"
+    sockjs-client: "npm:^1.6.1"
     turbo: "npm:^1.13.4"
     typescript: "npm:~5.8.3"
     ultra-runner: "npm:^3.10.5"
@@ -16179,6 +16261,19 @@ __metadata:
     dot-case: "npm:^3.0.4"
     tslib: "npm:^2.0.3"
   checksum: 10/0a7a79900bbb36f8aaa922cf111702a3647ac6165736d5dc96d3ef367efc50465cac70c53cd172c382b022dac72ec91710608e5393de71f76d7142e6fd80e8a3
+  languageName: node
+  linkType: hard
+
+"sockjs-client@npm:^1.6.1":
+  version: 1.6.1
+  resolution: "sockjs-client@npm:1.6.1"
+  dependencies:
+    debug: "npm:^3.2.7"
+    eventsource: "npm:^2.0.2"
+    faye-websocket: "npm:^0.11.4"
+    inherits: "npm:^2.0.4"
+    url-parse: "npm:^1.5.10"
+  checksum: 10/6d43b43352eb908bf5a250ac983d41fe7900bbbf143485f259641605d4064fc324d8c846eb2abbd32b87302491a7493751522312fddeb9b26e7c2f26bb0203ef
   languageName: node
   linkType: hard
 
@@ -17621,6 +17716,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"url-parse@npm:^1.5.10":
+  version: 1.5.10
+  resolution: "url-parse@npm:1.5.10"
+  dependencies:
+    querystringify: "npm:^2.1.1"
+    requires-port: "npm:^1.0.0"
+  checksum: 10/c9e96bc8c5b34e9f05ddfeffc12f6aadecbb0d971b3cc26015b58d5b44676a99f50d5aeb1e5c9e61fa4d49961ae3ab1ae997369ed44da51b2f5ac010d188e6ad
+  languageName: node
+  linkType: hard
+
 "url@npm:^0.11.0":
   version: 0.11.4
   resolution: "url@npm:0.11.4"
@@ -17914,6 +18019,24 @@ __metadata:
     source-list-map: "npm:^2.0.0"
     source-map: "npm:~0.6.1"
   checksum: 10/6237c5d1ba639a5d67bd1135c9bba487eadbd04c5e75a2849508013f13cb4b57387e689e0991c19a14a87085be7cc0b8dd1515422ae351f6e3f813ed100ccbb8
+  languageName: node
+  linkType: hard
+
+"websocket-driver@npm:>=0.5.1":
+  version: 0.7.4
+  resolution: "websocket-driver@npm:0.7.4"
+  dependencies:
+    http-parser-js: "npm:>=0.5.1"
+    safe-buffer: "npm:>=5.1.0"
+    websocket-extensions: "npm:>=0.1.1"
+  checksum: 10/17197d265d5812b96c728e70fd6fe7d067471e121669768fe0c7100c939d997ddfc807d371a728556e24fc7238aa9d58e630ea4ff5fd4cfbb40f3d0a240ef32d
+  languageName: node
+  linkType: hard
+
+"websocket-extensions@npm:>=0.1.1":
+  version: 0.1.4
+  resolution: "websocket-extensions@npm:0.1.4"
+  checksum: 10/b5399b487d277c78cdd2aef63764b67764aa9899431e3a2fa272c6ad7236a0fb4549b411d89afa76d5afd664c39d62fc19118582dc937e5bb17deb694f42a0d1
   languageName: node
   linkType: hard
 

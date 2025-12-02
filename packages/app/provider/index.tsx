@@ -1,4 +1,3 @@
-import { useColorScheme } from 'react-native'
 import {
   CustomToast,
   TamaguiProvider,
@@ -11,11 +10,11 @@ import { ToastViewport } from './ToastViewport'
 
 export function Provider({
   children,
-  defaultTheme = 'light',
+  defaultTheme = 'dark',
   ...rest
 }: Omit<TamaguiProviderProps, 'config'> & { defaultTheme?: string }) {
-  const colorScheme = useColorScheme()
-  const theme = defaultTheme || (colorScheme === 'dark' ? 'dark' : 'light')
+  // Always use dark theme
+  const theme = 'dark'
 
   return (
     <TamaguiProvider config={config} defaultTheme={theme} {...rest}>

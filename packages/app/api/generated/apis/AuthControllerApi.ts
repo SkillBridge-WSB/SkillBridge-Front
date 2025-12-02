@@ -15,11 +15,14 @@
 
 import * as runtime from '../runtime';
 import type {
+  ErrorResponse,
   LoginRequest,
   LoginResponse,
   RegisterRequest,
 } from '../models/index';
 import {
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     LoginRequestFromJSON,
     LoginRequestToJSON,
     LoginResponseFromJSON,

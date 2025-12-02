@@ -36,12 +36,14 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.24.6",
+    "@stomp/stompjs": "^7.2.1",
     "@tamagui/cli": "^1.135.4",
     "check-dependency-version-consistency": "^4.1.0",
     "eslint": "^9.3.0",
     "husky": "^9.1.6",
     "openapi-fetch": "^0.15.0",
     "prettier": "^3.3.3",
+    "sockjs-client": "^1.6.1",
     "turbo": "^1.13.4",
     "typescript": "~5.8.3",
     "ultra-runner": "^3.10.5",
@@ -55,6 +57,7 @@
   "devDependencies": {
     "@biomejs/biome": "^1.9.3",
     "@openapitools/openapi-generator-cli": "^2.25.0",
+    "@types/sockjs-client": "^1",
     "nodemon": "^3.1.10",
     "openapi-typescript": "^7.10.1"
   }

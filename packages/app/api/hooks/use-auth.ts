@@ -48,13 +48,13 @@ export const useLogin = () => {
 
       return data
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       // Extract token from response - assuming the API returns { token: string, user: User }
       const token = data.token
 
       if (token) {
         // Use the auth context to store the login data
-        loginContext(token)
+        await loginContext(token)
       }
 
       // Invalidate any auth-related queries

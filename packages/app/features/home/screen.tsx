@@ -18,7 +18,7 @@ import { useAuth } from '../../contexts/auth-context'
 import { AuthScreen } from '../auth/auth-screen'
 
 export function HomeScreen() {
-  const { isAuthenticated, user, logout } = useAuth()
+  const { isAuthenticated, logout } = useAuth()
   const linkTarget = '/user'
   const linkProps = useLink({
     href: `${linkTarget}/nate`,
@@ -49,10 +49,10 @@ export function HomeScreen() {
 
       <YStack gap="$4">
         <H1 text="center" color="$color12">
-          Welcome to SkillBridge, {user?.name}!
+          Welcome to SkillBridge !
         </H1>
         <Paragraph color="$color10" text="center">
-          You are logged in as {user?.email} ({user?.role})
+          You are logged in!
         </Paragraph>
         <Separator />
         <Paragraph text="center">

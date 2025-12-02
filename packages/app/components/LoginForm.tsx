@@ -50,12 +50,12 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
   }
 
   return (
-    <YStack space="$4" padding="$4" maxWidth={400} width="100%" alignItems="center">
+    <YStack space="$4" width="100%" alignItems="center">
       <Text fontSize="$6" fontWeight="bold" textAlign="center">
         Login
       </Text>
 
-      <YStack space="$2">
+      <YStack space="$2" width="100%">
         <Label htmlFor="email">Email</Label>
         <Input
           id="email"
@@ -64,10 +64,11 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
           placeholder="Enter email"
           keyboardType="email-address"
           autoCapitalize="none"
+          width="100%"
         />
       </YStack>
 
-      <YStack space="$2">
+      <YStack space="$2" width="100%">
         <Label htmlFor="password">Password</Label>
         <Input
           id="password"
@@ -75,6 +76,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
           onChangeText={handleChange('password')}
           placeholder="Enter password"
           secureTextEntry
+          width="100%"
         />
       </YStack>
 
@@ -82,6 +84,9 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
         onPress={handleSubmit}
         disabled={loginMutation.isPending}
         opacity={loginMutation.isPending ? 0.6 : 1}
+        width="100%"
+        backgroundColor="$orange6"
+        color="$textPrimary"
       >
         {loginMutation.isPending ? 'Logging in...' : 'Login'}
       </Button>
