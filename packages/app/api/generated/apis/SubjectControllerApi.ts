@@ -18,6 +18,7 @@ import type {
   CreateSubject,
   ErrorResponse,
   Subject,
+  UpdateSubject,
 } from '../models/index';
 import {
     CreateSubjectFromJSON,
@@ -26,7 +27,14 @@ import {
     ErrorResponseToJSON,
     SubjectFromJSON,
     SubjectToJSON,
+    UpdateSubjectFromJSON,
+    UpdateSubjectToJSON,
 } from '../models/index';
+
+export interface DeleteRequest {
+    userId: string;
+    subjectId: string;
+}
 
 export interface Create1Request {
     userId: string;
@@ -37,6 +45,12 @@ export interface ListRequest {
     tutorId: string;
 }
 
+export interface UpdateRequest {
+    userId: string;
+    subjectId: string;
+    updateSubject: UpdateSubject;
+}
+
 /**
  * SubjectControllerApi - interface
  * 
@@ -44,6 +58,20 @@ export interface ListRequest {
  * @interface SubjectControllerApiInterface
  */
 export interface SubjectControllerApiInterface {
+    /**
+     * 
+     * @param {string} userId 
+     * @param {string} subjectId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SubjectControllerApiInterface
+     */
+    _deleteRaw(requestParameters: DeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     */
+    _delete(requestParameters: DeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
     /**
      * 
      * @param {string} userId 
@@ -71,12 +99,72 @@ export interface SubjectControllerApiInterface {
      */
     list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Subject>>;
 
+    /**
+     * 
+     * @param {string} userId 
+     * @param {string} subjectId 
+     * @param {UpdateSubject} updateSubject 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SubjectControllerApiInterface
+     */
+    updateRaw(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Subject>>;
+
+    /**
+     */
+    update(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Subject>;
+
 }
 
 /**
  * 
  */
 export class SubjectControllerApi extends runtime.BaseAPI implements SubjectControllerApiInterface {
+
+    /**
+     */
+    async _deleteRaw(requestParameters: DeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['userId'] == null) {
+            throw new runtime.RequiredError(
+                'userId',
+                'Required parameter "userId" was null or undefined when calling _delete().'
+            );
+        }
+
+        if (requestParameters['subjectId'] == null) {
+            throw new runtime.RequiredError(
+                'subjectId',
+                'Required parameter "subjectId" was null or undefined when calling _delete().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['userId'] != null) {
+            queryParameters['userId'] = requestParameters['userId'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/api/subjects/{subjectId}`;
+        urlPath = urlPath.replace(`{${"subjectId"}}`, encodeURIComponent(String(requestParameters['subjectId'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async _delete(requestParameters: DeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this._deleteRaw(requestParameters, initOverrides);
+    }
 
     /**
      */
@@ -158,6 +246,62 @@ export class SubjectControllerApi extends runtime.BaseAPI implements SubjectCont
      */
     async list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Subject>> {
         const response = await this.listRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async updateRaw(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Subject>> {
+        if (requestParameters['userId'] == null) {
+            throw new runtime.RequiredError(
+                'userId',
+                'Required parameter "userId" was null or undefined when calling update().'
+            );
+        }
+
+        if (requestParameters['subjectId'] == null) {
+            throw new runtime.RequiredError(
+                'subjectId',
+                'Required parameter "subjectId" was null or undefined when calling update().'
+            );
+        }
+
+        if (requestParameters['updateSubject'] == null) {
+            throw new runtime.RequiredError(
+                'updateSubject',
+                'Required parameter "updateSubject" was null or undefined when calling update().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['userId'] != null) {
+            queryParameters['userId'] = requestParameters['userId'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/api/subjects/{subjectId}`;
+        urlPath = urlPath.replace(`{${"subjectId"}}`, encodeURIComponent(String(requestParameters['subjectId'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateSubjectToJSON(requestParameters['updateSubject']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => SubjectFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async update(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Subject> {
+        const response = await this.updateRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

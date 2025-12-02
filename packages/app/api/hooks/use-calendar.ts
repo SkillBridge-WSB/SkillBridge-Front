@@ -3,13 +3,13 @@ import { calendarApi } from '../api-instances'
 import type { CreateCalendarSlot } from '../generated/models'
 
 /**
- * Hook to get calendar slots for a tutor
+ * Hook to get available calendar slots for a tutor within a date range
  */
-export const useTutorCalendar = (tutorId: string, enabled = true) => {
+export const useTutorAvailableSlots = (tutorId: string, from: Date, to: Date, enabled = true) => {
   return useQuery({
-    queryKey: ['calendar', 'tutor', tutorId],
+    queryKey: ['calendar', 'available', tutorId, from.toISOString(), to.toISOString()],
     queryFn: async () => {
-      return await calendarApi.getCalendar({ tutorId })
+      return await calendarApi.available({ tutorId, from, to })
     },
     enabled: enabled && !!tutorId,
   })
@@ -32,11 +32,3 @@ export const useCreateCalendarSlot = () => {
     },
   })
 }
-
-
-
-
-
-
-
-

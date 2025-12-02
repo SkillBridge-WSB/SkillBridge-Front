@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { H1, H2, H3, Paragraph, YStack, XStack, Button, Input, Spinner } from '@my/ui'
 import { Search, Star, Plus, Check } from '@tamagui/lucide-icons'
-import { useSubjects } from '../../api/hooks'
+import { useSubjects, useCurrentUser } from '../../api/hooks'
 import type { Subject } from '../../constants/subjects'
 import { ScrollView, Platform } from 'react-native'
 import { useRouter } from 'solito/navigation'
@@ -103,7 +103,11 @@ export function ExploreScreen() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedSubjects, setSelectedSubjects] = useState<Set<string>>(new Set())
   const { data: subjects, isLoading, error } = useSubjects()
+  const { data: currentUser } = useCurrentUser()
   const router = useRouter()
+
+  // Tutors should not see the matching functionality
+  const isStudent = currentUser?.role?.toLowerCase() !== 'tutor'
 
   // Filter subjects based on search
   const filteredSubjects = subjects?.filter((subject) =>
@@ -137,7 +141,7 @@ export function ExploreScreen() {
                 Find tutors and subjects
               </Paragraph>
             </YStack>
-            {selectedSubjects.size > 0 && (
+            {isStudent && selectedSubjects.size > 0 && (
               <Button
                 size="$4"
                 backgroundColor="$orange6"

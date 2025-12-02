@@ -10,6 +10,7 @@ apis/index.ts
 index.ts
 models/BookLesson.ts
 models/CalendarSlot.ts
+models/ChatMessageRequest.ts
 models/ChatMessageResponse.ts
 models/ChatResponse.ts
 models/CreateCalendarSlot.ts
@@ -23,6 +24,7 @@ models/Subject.ts
 models/SubjectListItemResponse.ts
 models/Swipe.ts
 models/TutorListItemResponse.ts
+models/UpdateSubject.ts
 models/UpdateUser.ts
 models/User.ts
 models/index.ts

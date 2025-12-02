@@ -2,6 +2,7 @@
 /* eslint-disable */
 export * from './BookLesson';
 export * from './CalendarSlot';
+export * from './ChatMessageRequest';
 export * from './ChatMessageResponse';
 export * from './ChatResponse';
 export * from './CreateCalendarSlot';
@@ -15,5 +16,6 @@ export * from './Subject';
 export * from './SubjectListItemResponse';
 export * from './Swipe';
 export * from './TutorListItemResponse';
+export * from './UpdateSubject';
 export * from './UpdateUser';
 export * from './User';

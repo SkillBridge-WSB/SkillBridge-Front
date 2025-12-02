@@ -4,17 +4,23 @@ import type { UpdateUser } from '../generated/models'
 import { useAuth } from '../../contexts/auth-context'
 
 /**
- * Hook to get current user info
+ * Hook to get current user details
  */
-export const useCurrentUser = (enabled = true) => {
+export const useUserDetails = (enabled = true) => {
+  const { userId } = useAuth()
+
   return useQuery({
-    queryKey: ['user', 'me'],
+    queryKey: ['user', 'details', userId],
     queryFn: async () => {
-      return await userApi.getMe()
+      if (!userId) throw new Error('User not authenticated')
+      return await userApi.getUserDetails({ userId })
     },
-    enabled,
+    enabled: enabled && !!userId,
   })
 }
+
+// Alias for backwards compatibility
+export const useCurrentUser = useUserDetails
 
 /**
  * Hook to get all matches for the current user
@@ -33,13 +39,13 @@ export const useMatches = (enabled = true) => {
 }
 
 /**
- * Hook to get user by ID
+ * Hook to get user by ID (uses getUserDetails endpoint)
  */
 export const useUser = (userId: string, enabled = true) => {
   return useQuery({
     queryKey: ['user', userId],
     queryFn: async () => {
-      return await userApi.getUser({ id: userId })
+      return await userApi.getUserDetails({ userId })
     },
     enabled: enabled && !!userId,
   })

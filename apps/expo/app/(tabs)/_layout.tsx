@@ -1,10 +1,14 @@
 import { Tabs } from 'expo-router'
-import { Compass, MessageCircle, User } from '@tamagui/lucide-icons'
+import { Compass, MessageCircle, User, Calendar, CalendarDays } from '@tamagui/lucide-icons'
 import { Platform } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useUserDetails } from 'app/api/hooks/use-user'
 
 export default function TabsLayout() {
   const insets = useSafeAreaInsets()
+  const { data: userDetails } = useUserDetails()
+
+  const isTutor = userDetails?.role === 'TUTOR'
 
   return (
     <Tabs
@@ -28,11 +32,29 @@ export default function TabsLayout() {
         },
       }}
     >
+      {/* Explore tab - only visible for students */}
       <Tabs.Screen
         name="explore"
         options={{
           title: 'Explore',
           tabBarIcon: ({ color, size }) => <Compass size={size} color={color} />,
+          href: isTutor ? null : '/explore', // Hide for tutors
+        }}
+      />
+      {/* Calendar tab - only visible for tutors */}
+      <Tabs.Screen
+        name="calendar"
+        options={{
+          title: 'Calendar',
+          tabBarIcon: ({ color, size }) => <CalendarDays size={size} color={color} />,
+          href: isTutor ? '/calendar' : null, // Hide for students
+        }}
+      />
+      <Tabs.Screen
+        name="lessons"
+        options={{
+          title: 'Lessons',
+          tabBarIcon: ({ color, size }) => <Calendar size={size} color={color} />,
         }}
       />
       <Tabs.Screen

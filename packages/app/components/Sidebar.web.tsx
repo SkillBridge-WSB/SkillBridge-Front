@@ -7,21 +7,34 @@ import {
   ChevronLeft,
   ChevronRight,
   LogOut,
+  Calendar,
+  CalendarDays,
 } from '@tamagui/lucide-icons'
 import { Button, YStack, XStack, H3 } from '@my/ui'
 import { useLink } from 'solito/navigation'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useAuth } from '../contexts/auth-context'
+import { useUserDetails } from '../api/hooks/use-user'
 
-const navItems = [
+// Navigation items for students
+const studentNavItems = [
   { href: '/', label: 'Explore', icon: Compass },
+  { href: '/lessons', label: 'Lessons', icon: Calendar },
+  { href: '/chat', label: 'Chat', icon: MessageCircle },
+  { href: '/profile', label: 'Profile', icon: User },
+]
+
+// Navigation items for tutors (no Explore, has Calendar for availability)
+const tutorNavItems = [
+  { href: '/calendar', label: 'Calendar', icon: CalendarDays },
+  { href: '/', label: 'Lessons', icon: Calendar },
   { href: '/chat', label: 'Chat', icon: MessageCircle },
   { href: '/profile', label: 'Profile', icon: User },
 ]
 
 interface NavButtonProps {
-  item: (typeof navItems)[0]
+  item: (typeof studentNavItems)[0]
   isActive: boolean
   isMobileCollapsed?: boolean
   onPress?: () => void
@@ -80,6 +93,12 @@ export function Sidebar({ isOpen = false, onClose, onCollapseChange }: SidebarPr
   const router = useRouter()
   const currentPath = router?.pathname || '/'
   const { logout } = useAuth()
+  const { data: userDetails } = useUserDetails()
+
+  // Determine nav items based on user role
+  const navItems = useMemo(() => {
+    return userDetails?.role === 'TUTOR' ? tutorNavItems : studentNavItems
+  }, [userDetails?.role])
 
   // Mobile-only state: controls whether sidebar is collapsed (icon-only mode)
   const [mobileCollapsed, setMobileCollapsed] = useState(false)

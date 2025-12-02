@@ -17,15 +17,15 @@ export const headingFont = createInterFont({
     7: '$color',
   },
   letterSpacing: {
-    5: 2,
-    6: 1,
+    5: 0,
+    6: 0,
     7: 0,
-    8: -1,
-    9: -2,
-    10: -3,
-    12: -4,
-    14: -5,
-    15: -6,
+    8: 0,
+    9: -0.5,
+    10: -0.5,
+    12: -0.5,
+    14: -0.5,
+    15: -0.5,
   },
   face: {
     700: { normal: 'InterBold' },
@@ -34,6 +34,16 @@ export const headingFont = createInterFont({
 
 export const bodyFont = createInterFont(
   {
+    letterSpacing: {
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 0,
+      6: 0,
+      7: 0,
+      8: 0,
+    },
     face: {
       700: { normal: 'InterBold' },
     },

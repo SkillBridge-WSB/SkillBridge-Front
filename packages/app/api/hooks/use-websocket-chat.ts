@@ -1,7 +1,16 @@
 import { useEffect, useRef, useCallback, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import { webSocketService, ChatMessageCallback } from '../services/websocket-service'
 import type { ChatMessageResponse } from '../generated/models'
+
+// Lazy load websocket service to avoid SSR issues
+let webSocketServiceInstance: any = null
+const getWebSocketService = async () => {
+  if (!webSocketServiceInstance) {
+    const { webSocketService } = await import('../services/websocket-service')
+    webSocketServiceInstance = webSocketService
+  }
+  return webSocketServiceInstance
+}
 
 interface UseWebSocketChatOptions {
   chatId: string | undefined
@@ -22,17 +31,25 @@ export const useWebSocketChat = ({ chatId, enabled = true }: UseWebSocketChatOpt
   chatIdRef.current = chatId
 
   // Handle incoming messages - use ref to avoid dependency issues
-  const handleMessageRef = useRef<ChatMessageCallback>((message: ChatMessageResponse) => {
+  const handleMessageRef = useRef((message: any) => {
     const currentChatId = chatIdRef.current
+    // Convert to ChatMessageResponse format
+    const chatMessage: ChatMessageResponse = {
+      messageId: message.messageId || message.id,
+      senderId: message.senderId,
+      message: message.message || message.content,
+      timestamp: message.timestamp || Date.now(),
+    }
+    
     queryClient.setQueryData(['chat', 'messages', currentChatId], (old: ChatMessageResponse[] | undefined) => {
-      if (!old) return [message]
+      if (!old) return [chatMessage]
       
       // Check if message already exists (avoid duplicates)
-      const exists = old.some((m) => m.messageId === message.messageId)
+      const exists = old.some((m) => m.messageId === chatMessage.messageId)
       if (exists) return old
       
       // Add new message and sort by timestamp
-      return [...old, message].sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0))
+      return [...old, chatMessage].sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0))
     })
   })
 
@@ -47,15 +64,26 @@ export const useWebSocketChat = ({ chatId, enabled = true }: UseWebSocketChatOpt
       return
     }
 
+    let isMounted = true
+
     const subscribe = async () => {
       try {
-        await webSocketService.connect()
-        await webSocketService.subscribeToChat(chatId, handleMessageRef.current)
+        const wsService = await getWebSocketService()
+        if (!isMounted) return
+        
+        await wsService.connect()
+        if (!isMounted) return
+        
+        await wsService.subscribeToChat(chatId, handleMessageRef.current)
+        if (!isMounted) return
+        
         isSubscribedRef.current = true
         setIsConnected(true)
       } catch (error) {
         console.error('Failed to subscribe to chat:', error)
-        setIsConnected(false)
+        if (isMounted) {
+          setIsConnected(false)
+        }
       }
     }
 
@@ -63,8 +91,11 @@ export const useWebSocketChat = ({ chatId, enabled = true }: UseWebSocketChatOpt
 
     // Cleanup: unsubscribe when component unmounts or chatId changes
     return () => {
+      isMounted = false
       if (chatId && isSubscribedRef.current) {
-        webSocketService.unsubscribeFromChat(chatId)
+        getWebSocketService().then((wsService) => {
+          wsService.unsubscribeFromChat(chatId)
+        })
         isSubscribedRef.current = false
         setIsConnected(false)
       }
@@ -79,7 +110,8 @@ export const useWebSocketChat = ({ chatId, enabled = true }: UseWebSocketChatOpt
       }
 
       try {
-        await webSocketService.sendMessage(chatId, senderId, receiverId, message)
+        const wsService = await getWebSocketService()
+        await wsService.sendChatMessage(chatId, senderId, receiverId, message)
       } catch (error) {
         console.error('Failed to send message:', error)
         throw error

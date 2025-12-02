@@ -10,12 +10,22 @@ import {
   Spinner,
   Input,
   ScrollView,
+  useToastController,
 } from '@my/ui'
-import { MessageCircle, Send, User, ArrowLeft, Users } from '@tamagui/lucide-icons'
+import {
+  MessageCircle,
+  Send,
+  User,
+  ArrowLeft,
+  Users,
+  AlertCircle,
+  Calendar,
+} from '@tamagui/lucide-icons'
 import { useMatches } from '../../api/hooks/use-user'
-import { useFindChat, useChatMessages } from '../../api/hooks/use-chat'
+import { useFindChat, useChatMessages, useSendMessage } from '../../api/hooks/use-chat'
 import { useWebSocketChat } from '../../api/hooks/use-websocket-chat'
 import { useAuth } from '../../contexts/auth-context'
+import { BookingModal } from '../../components/BookingModal'
 import type { User as UserType, ChatMessageResponse } from '../../api/generated/models'
 import { Image, Platform, KeyboardAvoidingView } from 'react-native'
 
@@ -77,7 +87,12 @@ interface ChatViewProps {
 function ChatView({ match, onBack }: ChatViewProps) {
   const { userId } = useAuth()
   const [message, setMessage] = useState('')
+  const [bookingModalOpen, setBookingModalOpen] = useState(false)
   const scrollViewRef = useRef<any>(null)
+  const toast = useToastController()
+
+  // Show booking button only if the match is a tutor
+  const canBookLesson = match.role === 'TUTOR'
 
   // Determine student/tutor IDs based on current user role
   // If I'm a student, the match is a tutor. If I'm a tutor, the match is a student.
@@ -86,19 +101,26 @@ function ChatView({ match, onBack }: ChatViewProps) {
   const tutorId = isMatchTutor ? match.id! : userId!
 
   // Find or create chat
-  const { data: chat, isLoading: isChatLoading } = useFindChat(studentId, tutorId, !!userId && !!match.id)
+  const { data: chat, isLoading: isChatLoading } = useFindChat(
+    studentId,
+    tutorId,
+    !!userId && !!match.id
+  )
 
-  // Get messages for the chat
+  // Get messages for the chat (with polling as WebSocket fallback)
   const { data: messages, isLoading: isMessagesLoading } = useChatMessages(
     chat?.chatId || '',
     !!chat?.chatId
   )
 
   // WebSocket connection for real-time messaging
-  const { sendMessage: sendWebSocketMessage, isConnected } = useWebSocketChat({
+  const { isConnected } = useWebSocketChat({
     chatId: chat?.chatId,
     enabled: !!chat?.chatId && !!userId,
   })
+
+  // Send message mutation with optimistic updates
+  const sendMessageMutation = useSendMessage(chat?.chatId)
 
   // Determine receiver ID (the other person in the chat)
   const receiverId = match.id!
@@ -115,16 +137,26 @@ function ChatView({ match, onBack }: ChatViewProps) {
   const handleSend = async () => {
     if (!message.trim() || !userId || !chat?.chatId) return
 
+    const messageText = message.trim()
+    setMessage('') // Clear immediately for better UX
+
     try {
-      await sendWebSocketMessage(userId, receiverId, message.trim())
-      setMessage('')
+      await sendMessageMutation.mutateAsync({
+        senderId: userId,
+        receiverId,
+        message: messageText,
+      })
     } catch (error) {
       console.error('Failed to send message:', error)
-      // Optionally show error toast/notification to user
+      setMessage(messageText) // Restore message on error
+      toast.show('Failed to send message', {
+        message: 'Please try again',
+      })
     }
   }
 
   const isLoading = isChatLoading || isMessagesLoading
+  const isSending = sendMessageMutation.isPending
 
   return (
     <YStack flex={1} bg="$background">
@@ -167,24 +199,46 @@ function ChatView({ match, onBack }: ChatViewProps) {
             <Paragraph color="$textPrimary" fontWeight="600" fontSize="$5">
               {match.name || 'Unknown User'}
             </Paragraph>
-            {isConnected && (
-              <YStack width={8} height={8} borderRadius={4} bg="$green9" />
-            )}
+            <YStack
+              width={8}
+              height={8}
+              borderRadius={4}
+              bg={isConnected ? '$green9' : '$yellow9'}
+            />
           </XStack>
           <Paragraph color="$textSecondary" fontSize="$2">
             {match.role === 'TUTOR' ? 'Tutor' : 'Student'}
-            {!isConnected && ' • Connecting...'}
+            {!isConnected && ' • Live updates paused'}
           </Paragraph>
         </YStack>
+
+        {/* Book Lesson Button - only visible for tutors */}
+        {canBookLesson && (
+          <Button
+            icon={Calendar}
+            size="$3"
+            backgroundColor="$orange6"
+            color="white"
+            borderRadius="$3"
+            onPress={() => setBookingModalOpen(true)}
+          >
+            Book
+          </Button>
+        )}
       </XStack>
 
+      {/* Booking Modal */}
+      {canBookLesson && match.id && (
+        <BookingModal
+          open={bookingModalOpen}
+          onOpenChange={setBookingModalOpen}
+          tutorId={match.id}
+          tutorName={match.name || 'Unknown'}
+        />
+      )}
+
       {/* Messages */}
-      <ScrollView
-        ref={scrollViewRef}
-        flex={1}
-        padding="$4"
-        contentContainerStyle={{ flexGrow: 1 }}
-      >
+      <ScrollView ref={scrollViewRef} flex={1} padding="$4" contentContainerStyle={{ flexGrow: 1 }}>
         {isLoading ? (
           <YStack flex={1} alignItems="center" justifyContent="center">
             <Spinner size="large" color="$orange6" />
@@ -221,17 +275,20 @@ function ChatView({ match, onBack }: ChatViewProps) {
           onSubmitEditing={handleSend}
           backgroundColor="$backgroundFocus"
           borderColor="$borderColor"
+          editable={!isSending}
         />
         <Button
-          icon={Send}
+          icon={isSending ? undefined : Send}
           size="$4"
           circular
           backgroundColor="$orange6"
           color="$color1"
           onPress={handleSend}
-          disabled={!message.trim()}
-          opacity={message.trim() ? 1 : 0.5}
-        />
+          disabled={!message.trim() || isSending}
+          opacity={message.trim() && !isSending ? 1 : 0.5}
+        >
+          {isSending && <Spinner size="small" color="$color1" />}
+        </Button>
       </XStack>
     </YStack>
   )
@@ -259,11 +316,7 @@ function MessageBubble({ message, isOwn }: MessageBubbleProps) {
         <Paragraph color={isOwn ? '$color1' : '$textPrimary'} fontSize="$4">
           {message.message}
         </Paragraph>
-        <Paragraph
-          color={isOwn ? '$orange2' : '$textSecondary'}
-          fontSize="$1"
-          textAlign="right"
-        >
+        <Paragraph color={isOwn ? '$orange2' : '$textSecondary'} fontSize="$1" textAlign="right">
           {timestamp}
         </Paragraph>
       </YStack>

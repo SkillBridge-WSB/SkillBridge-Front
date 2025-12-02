@@ -14,12 +14,22 @@ if [ ! -s openapi-spec.json ]; then
     exit 1
 fi
 
-echo "🔧 Adding login endpoint to OpenAPI spec..."
+echo "🔧 Fixing malformed paths and adding login endpoint to OpenAPI spec..."
 # Create a temporary file for processing
 TEMP_FILE=$(mktemp)
 
-# Add the login endpoint and schemas
-jq '.paths["/auth/login"] = {
+# Fix malformed paths (remove {$request-path} prefix) and add login endpoint
+jq '
+# Fix paths with {$request-path} prefix
+.paths = (
+  .paths | to_entries | map(
+    if .key | startswith("/{$request-path}") then
+      .key = (.key | sub("^/\\{\\$request-path\\}"; "/api"))
+    else . end
+  ) | from_entries
+) |
+# Add login endpoint and schemas
+.paths["/auth/login"] = {
   "post": {
     "tags": ["auth-controller"],
     "operationId": "login",

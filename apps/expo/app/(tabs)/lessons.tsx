@@ -1,11 +1,11 @@
-import { ChatScreen } from 'app/features/chat/screen'
+import { LessonsScreen } from 'app/features/lessons/screen'
 import { Stack } from 'expo-router'
 import { View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-export default function ChatTab() {
+export default function LessonsTab() {
   const insets = useSafeAreaInsets()
-  
+
   return (
     <View style={{ flex: 1, paddingTop: insets.top }}>
       <Stack.Screen
@@ -13,9 +13,11 @@ export default function ChatTab() {
           headerShown: false,
         }}
       />
-      <ChatScreen />
+      <LessonsScreen />
     </View>
   )
 }
+
+
 
 

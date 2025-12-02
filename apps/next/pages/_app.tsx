@@ -22,6 +22,7 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
         <meta name="description" content="Tamagui, Solito, Expo & Next.js" />
         <link rel="icon" href="/favicon.ico" />
         <style
+          key="tamagui-new-css"
           dangerouslySetInnerHTML={{
             // the first time this runs you'll get the full CSS including all themes
             // after that, it will only return CSS generated since the last call
@@ -30,6 +31,7 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
         />
 
         <style
+          key="tamagui-css"
           dangerouslySetInnerHTML={{
             __html: config.getCSS({
               // if you are using "outputCSS" option, you should use this "exclude"
@@ -40,6 +42,7 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
         />
 
         <script
+          key="tamagui-unmounted"
           dangerouslySetInnerHTML={{
             // avoid flash of animated things on enter:
             __html: `document.documentElement.classList.add('t_unmounted')`,

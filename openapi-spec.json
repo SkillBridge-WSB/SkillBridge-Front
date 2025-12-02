@@ -114,6 +114,127 @@
         }
       }
     },
+    "/api/subjects/{subjectId}": {
+      "put": {
+        "tags": [
+          "subject-controller"
+        ],
+        "operationId": "update",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "subjectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSubject"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Subject"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "subject-controller"
+        ],
+        "operationId": "delete",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "subjectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
     "/api/lessons/{id}/accept": {
       "put": {
         "tags": [
@@ -175,6 +296,56 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/Lesson"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/chat/send-message": {
+      "post": {
+        "tags": [
+          "chat-controller"
+        ],
+        "operationId": "sendMessageRest",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatMessageRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatMessageResponse"
                 }
               }
             }
@@ -419,6 +590,70 @@
       }
     },
     "/api/lessons": {
+      "get": {
+        "tags": [
+          "lesson-controller"
+        ],
+        "operationId": "getLessons",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "role",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "STUDENT",
+                "TUTOR"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Lesson"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "lesson-controller"
@@ -1050,6 +1285,47 @@
           }
         }
       },
+      "UpdateSubject": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 3
+          },
+          "costPerHour": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 1
+          },
+          "availability": {
+            "type": "string"
+          }
+        }
+      },
+      "Subject": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "costPerHour": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "availability": {
+            "type": "string"
+          },
+          "tutorId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
       "Lesson": {
         "type": "object",
         "properties": {
@@ -1074,6 +1350,63 @@
           },
           "status": {
             "type": "string"
+          },
+          "studentName": {
+            "type": "string"
+          },
+          "tutorName": {
+            "type": "string"
+          },
+          "costPerHour": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ChatMessageRequest": {
+        "type": "object",
+        "properties": {
+          "chatId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "senderId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "receiverId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "message": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "chatId",
+          "receiverId",
+          "senderId"
+        ]
+      },
+      "ChatMessageResponse": {
+        "type": "object",
+        "properties": {
+          "messageId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "senderId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "message": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -1161,29 +1494,6 @@
           "name"
         ]
       },
-      "Subject": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string"
-          },
-          "costPerHour": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "availability": {
-            "type": "string"
-          },
-          "tutorId": {
-            "type": "string",
-            "format": "uuid"
-          }
-        }
-      },
       "Swipe": {
         "type": "object",
         "properties": {
@@ -1223,26 +1533,6 @@
           "subjectId",
           "tutorId"
         ]
-      },
-      "ChatMessageResponse": {
-        "type": "object",
-        "properties": {
-          "messageId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "senderId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "message": {
-            "type": "string"
-          },
-          "timestamp": {
-            "type": "integer",
-            "format": "int64"
-          }
-        }
       },
       "ChatResponse": {
         "type": "object",

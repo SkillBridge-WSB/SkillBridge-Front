@@ -55,6 +55,24 @@ export interface Lesson {
      * @memberof Lesson
      */
     status?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lesson
+     */
+    studentName?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lesson
+     */
+    tutorName?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Lesson
+     */
+    costPerHour?: number;
 }
 
 /**
@@ -80,6 +98,9 @@ export function LessonFromJSONTyped(json: any, ignoreDiscriminator: boolean): Le
         'subjectName': json['subjectName'] == null ? undefined : json['subjectName'],
         'time': json['time'] == null ? undefined : (new Date(json['time'])),
         'status': json['status'] == null ? undefined : json['status'],
+        'studentName': json['studentName'] == null ? undefined : json['studentName'],
+        'tutorName': json['tutorName'] == null ? undefined : json['tutorName'],
+        'costPerHour': json['costPerHour'] == null ? undefined : json['costPerHour'],
     };
 }
 
@@ -100,6 +121,9 @@ export function LessonToJSONTyped(value?: Lesson | null, ignoreDiscriminator: bo
         'subjectName': value['subjectName'],
         'time': value['time'] == null ? value['time'] : value['time'].toISOString(),
         'status': value['status'],
+        'studentName': value['studentName'],
+        'tutorName': value['tutorName'],
+        'costPerHour': value['costPerHour'],
     };
 }
 

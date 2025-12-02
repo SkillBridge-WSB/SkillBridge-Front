@@ -20,6 +20,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/subjects/{subjectId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["update"];
+        post?: never;
+        delete: operations["delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/lessons/{id}/accept": {
         parameters: {
             query?: never;
@@ -30,6 +46,22 @@ export interface paths {
         get?: never;
         put: operations["accept"];
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/chat/send-message": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["sendMessageRest"];
         delete?: never;
         options?: never;
         head?: never;
@@ -107,7 +139,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        get: operations["getLessons"];
         put?: never;
         post: operations["book"];
         delete?: never;
@@ -285,6 +317,22 @@ export interface components {
             imageUrl?: string;
             role?: string;
         };
+        UpdateSubject: {
+            name?: string;
+            /** Format: int32 */
+            costPerHour?: number;
+            availability?: string;
+        };
+        Subject: {
+            /** Format: uuid */
+            id?: string;
+            name?: string;
+            /** Format: int32 */
+            costPerHour?: number;
+            availability?: string;
+            /** Format: uuid */
+            tutorId?: string;
+        };
         Lesson: {
             /** Format: uuid */
             id?: string;
@@ -296,6 +344,28 @@ export interface components {
             /** Format: date-time */
             time?: string;
             status?: string;
+            studentName?: string;
+            tutorName?: string;
+            /** Format: int32 */
+            costPerHour?: number;
+        };
+        ChatMessageRequest: {
+            /** Format: uuid */
+            chatId: string;
+            /** Format: uuid */
+            senderId: string;
+            /** Format: uuid */
+            receiverId: string;
+            message?: string;
+        };
+        ChatMessageResponse: {
+            /** Format: uuid */
+            messageId?: string;
+            /** Format: uuid */
+            senderId?: string;
+            message?: string;
+            /** Format: int64 */
+            timestamp?: number;
         };
         CreateCalendarSlot: {
             /** Format: date-time */
@@ -325,16 +395,6 @@ export interface components {
             costPerHour?: number;
             availability?: string;
         };
-        Subject: {
-            /** Format: uuid */
-            id?: string;
-            name?: string;
-            /** Format: int32 */
-            costPerHour?: number;
-            availability?: string;
-            /** Format: uuid */
-            tutorId?: string;
-        };
         Swipe: {
             /** Format: uuid */
             tutorId: string;
@@ -348,15 +408,6 @@ export interface components {
             calendarSlotId: string;
             /** Format: uuid */
             subjectId: string;
-        };
-        ChatMessageResponse: {
-            /** Format: uuid */
-            messageId?: string;
-            /** Format: uuid */
-            senderId?: string;
-            message?: string;
-            /** Format: int64 */
-            timestamp?: number;
         };
         ChatResponse: {
             /** Format: uuid */
@@ -481,6 +532,92 @@ export interface operations {
             };
         };
     };
+    update: {
+        parameters: {
+            query: {
+                userId: string;
+            };
+            header?: never;
+            path: {
+                subjectId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSubject"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["Subject"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    delete: {
+        parameters: {
+            query: {
+                userId: string;
+            };
+            header?: never;
+            path: {
+                subjectId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
     accept: {
         parameters: {
             query: {
@@ -502,6 +639,48 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["Lesson"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    sendMessageRest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChatMessageRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ChatMessageResponse"];
                 };
             };
             /** @description Bad Request */
@@ -678,6 +857,47 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["Swipe"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getLessons: {
+        parameters: {
+            query: {
+                userId: string;
+                role: "STUDENT" | "TUTOR";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["Lesson"][];
                 };
             };
             /** @description Bad Request */

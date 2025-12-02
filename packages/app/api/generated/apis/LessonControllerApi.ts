@@ -45,6 +45,11 @@ export interface CancelRequest {
     id: string;
 }
 
+export interface GetLessonsRequest {
+    userId: string;
+    role: GetLessonsRoleEnum;
+}
+
 /**
  * LessonControllerApi - interface
  * 
@@ -95,6 +100,20 @@ export interface LessonControllerApiInterface {
     /**
      */
     cancel(requestParameters: CancelRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * 
+     * @param {string} userId 
+     * @param {'STUDENT' | 'TUTOR'} role 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof LessonControllerApiInterface
+     */
+    getLessonsRaw(requestParameters: GetLessonsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Lesson>>>;
+
+    /**
+     */
+    getLessons(requestParameters: GetLessonsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Lesson>>;
 
 }
 
@@ -264,6 +283,55 @@ export class LessonControllerApi extends runtime.BaseAPI implements LessonContro
         await this.cancelRaw(requestParameters, initOverrides);
     }
 
+    /**
+     */
+    async getLessonsRaw(requestParameters: GetLessonsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Lesson>>> {
+        if (requestParameters['userId'] == null) {
+            throw new runtime.RequiredError(
+                'userId',
+                'Required parameter "userId" was null or undefined when calling getLessons().'
+            );
+        }
+
+        if (requestParameters['role'] == null) {
+            throw new runtime.RequiredError(
+                'role',
+                'Required parameter "role" was null or undefined when calling getLessons().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['userId'] != null) {
+            queryParameters['userId'] = requestParameters['userId'];
+        }
+
+        if (requestParameters['role'] != null) {
+            queryParameters['role'] = requestParameters['role'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/api/lessons`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(LessonFromJSON));
+    }
+
+    /**
+     */
+    async getLessons(requestParameters: GetLessonsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Lesson>> {
+        const response = await this.getLessonsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
 }
 
 /**
@@ -274,3 +342,11 @@ export const CancelRoleEnum = {
     TUTOR: 'TUTOR'
 } as const;
 export type CancelRoleEnum = typeof CancelRoleEnum[keyof typeof CancelRoleEnum];
+/**
+ * @export
+ */
+export const GetLessonsRoleEnum = {
+    STUDENT: 'STUDENT',
+    TUTOR: 'TUTOR'
+} as const;
+export type GetLessonsRoleEnum = typeof GetLessonsRoleEnum[keyof typeof GetLessonsRoleEnum];

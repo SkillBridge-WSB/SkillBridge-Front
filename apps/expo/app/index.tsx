@@ -2,11 +2,14 @@ import { useEffect } from 'react'
 import { Stack, useRouter, useSegments } from 'expo-router'
 import { useAuth } from 'app/contexts/auth-context'
 import { AuthScreen } from 'app/features/auth/auth-screen'
+import { View } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function Index() {
   const { isAuthenticated, isLoading } = useAuth()
   const segments = useSegments()
   const router = useRouter()
+  const insets = useSafeAreaInsets()
 
   useEffect(() => {
     if (isLoading) return
@@ -23,14 +26,14 @@ export default function Index() {
   // Show auth screen if not authenticated
   if (!isAuthenticated) {
     return (
-      <>
+      <View style={{ flex: 1, paddingTop: insets.top }}>
         <Stack.Screen
           options={{
             headerShown: false,
           }}
         />
         <AuthScreen />
-      </>
+      </View>
     )
   }
 

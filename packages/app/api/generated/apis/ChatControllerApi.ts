@@ -15,11 +15,14 @@
 
 import * as runtime from '../runtime';
 import type {
+  ChatMessageRequest,
   ChatMessageResponse,
   ChatResponse,
   ErrorResponse,
 } from '../models/index';
 import {
+    ChatMessageRequestFromJSON,
+    ChatMessageRequestToJSON,
     ChatMessageResponseFromJSON,
     ChatMessageResponseToJSON,
     ChatResponseFromJSON,
@@ -35,6 +38,10 @@ export interface FindChatRequest {
 
 export interface GetMessagesRequest {
     chatId: string;
+}
+
+export interface SendMessageRestRequest {
+    chatMessageRequest: ChatMessageRequest;
 }
 
 /**
@@ -70,6 +77,19 @@ export interface ChatControllerApiInterface {
     /**
      */
     getMessages(requestParameters: GetMessagesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ChatMessageResponse>>;
+
+    /**
+     * 
+     * @param {ChatMessageRequest} chatMessageRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ChatControllerApiInterface
+     */
+    sendMessageRestRaw(requestParameters: SendMessageRestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ChatMessageResponse>>;
+
+    /**
+     */
+    sendMessageRest(requestParameters: SendMessageRestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChatMessageResponse>;
 
 }
 
@@ -159,6 +179,43 @@ export class ChatControllerApi extends runtime.BaseAPI implements ChatController
      */
     async getMessages(requestParameters: GetMessagesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ChatMessageResponse>> {
         const response = await this.getMessagesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async sendMessageRestRaw(requestParameters: SendMessageRestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ChatMessageResponse>> {
+        if (requestParameters['chatMessageRequest'] == null) {
+            throw new runtime.RequiredError(
+                'chatMessageRequest',
+                'Required parameter "chatMessageRequest" was null or undefined when calling sendMessageRest().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/api/chat/send-message`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ChatMessageRequestToJSON(requestParameters['chatMessageRequest']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ChatMessageResponseFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async sendMessageRest(requestParameters: SendMessageRestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChatMessageResponse> {
+        const response = await this.sendMessageRestRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
